@@ -1,9 +1,28 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "localidad.h"
-#include "input.h"
 
-int mostarLocalidades(eLocalidad lista [], int longitud){
+
+int inicializarListaLocalidades(eLocalidad list[], int len)
+{
+    if(list==NULL ||len<1 ) return -1;
+	for(int i=0; i<len; i++){
+		list[i].isEmpty=1;
+	}
+    return 0;
+}
+
+int buscarLocalidadPorId(eLocalidad list[], int len, int id)
+{
+    if(list==NULL ||len<1 ) return -1;
+	for(int i=0; i<len; i++){
+		if(list[i].id==id && list[i].isEmpty==0) return i;
+	}
+    return -1;
+}
+
+int mostarLocalidades(eLocalidad lista [], int longitud)
+{
     int contador=0;
 
     if(lista==NULL || longitud<1) return -1;
@@ -15,7 +34,8 @@ int mostarLocalidades(eLocalidad lista [], int longitud){
     return contador;
 }
 
-int ingresarLocalidad(eLocalidad lista [], int longitud){
+int ingresarLocalidad(eLocalidad lista [], int longitud)
+{
     int contador=0;
     int opcion;
     int id;
@@ -23,7 +43,11 @@ int ingresarLocalidad(eLocalidad lista [], int longitud){
     if(lista==NULL || longitud<1) return -1;
 
     contador = mostarLocalidades(lista, longitud);
-    if(contador>0) opcion = getInt("Ingrese el numero de su localidad",1,contador);
+
+    if(contador>0)
+	{
+		opcion = getInt("Ingrese el numero de su localidad",1,contador);
+	}
 
     for(int i=0 ; i<longitud ; i++){
         if(lista[i].isEmpty==0 && (--opcion)==0 ){
@@ -34,7 +58,3 @@ int ingresarLocalidad(eLocalidad lista [], int longitud){
     }
     return id;
 }
-
-
-
-

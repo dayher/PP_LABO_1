@@ -1,9 +1,6 @@
 #ifndef INPUT_H_
 #define INPUT_H_
 
-
-#endif /* INPUT_H_ */
-
 float getFloat(char mensaje[],float min , float max);
 
 int getInt(char mensaje[],int min,int max);
@@ -21,3 +18,6 @@ void getString(char mensaje[],char input[]);
 int getStringLetras(char mensaje[],char input[]);
 
 int getStringNumeros(char mensaje[],char input[]);
+
+#endif /* INPUT_H_ */
+

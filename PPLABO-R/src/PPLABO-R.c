@@ -13,6 +13,7 @@
 
 #define MAX_CLIENTE 100
 #define MAX_PEDIDO 1000
+#define MAX_LOCALIDAD 5
 #define ALTA 1
 #define BAJA 2
 #define MODIFICACION 3
@@ -36,9 +37,11 @@ int main()
     int altaClientes = 0;
     eCliente listaClientes[MAX_CLIENTE];
     ePedido listaPedidos[MAX_PEDIDO];
+    eLocalidad listaLocalidades[MAX_LOCALIDAD] = {{10,"CABA",0},{11,"Jujuy",0},{12,"Mendoza",0},{13,"Bariloche",0}};
 
     inicializarListaClientes(listaClientes, MAX_CLIENTE);
     inicializarListaPedidos(listaPedidos, MAX_PEDIDO);
+   /* inicializarListaLocalidades(listaLocalidades, MAX_LOCALIDAD);*/
 
     while(opcion!=SALIR){
 		printf("\n"
@@ -59,7 +62,7 @@ int main()
 
 		switch(opcion){
 		case ALTA:
-			if(!ingresarCliente(listaClientes,MAX_CLIENTE,idCliente)){
+			if(!ingresarCliente(listaClientes,MAX_CLIENTE,idCliente, listaLocalidades, MAX_LOCALIDAD)){
 				idCliente++;
 				printf("\nAlta exitosa\n");
 				altaClientes++;
@@ -83,7 +86,7 @@ int main()
 			if(altaClientes==0){
 				printf("\nNo hay Altas en el sistema\n");
 			} else {
-				if(modificarCliente(listaClientes,MAX_CLIENTE)){
+				if(modificarCliente(listaClientes,MAX_CLIENTE, listaLocalidades, MAX_LOCALIDAD)){
 					printf("No existe ningún cliente con el id ingresado\n");
 				} else {
 					printf("\nModificacion exitosa\n");
@@ -121,7 +124,7 @@ int main()
 			if(altaClientes==0){
 				printf("\nNo hay Altas en el sistema\n");
 			} else {
-				imprimirClientes(listaPedidos, MAX_PEDIDO, listaClientes,MAX_CLIENTE);
+				imprimirClientes(listaPedidos, MAX_PEDIDO, listaClientes,MAX_CLIENTE, listaLocalidades, MAX_LOCALIDAD);
 			}
 			break;
 		case PENDIENTES:
@@ -142,7 +145,7 @@ int main()
 			if(altaClientes==0|| pedidosPendientes==0){
 				printf("\nNo hay altas en el sistema o no hay pedidos pendientes\n");
 			} else {
-				imprimirPendientesPorLocalidad(listaPedidos, MAX_PEDIDO, listaClientes,MAX_CLIENTE);
+				imprimirPendientesPorLocalidad(listaPedidos, MAX_PEDIDO, listaClientes,MAX_CLIENTE, listaLocalidades, MAX_LOCALIDAD);
 			}
 			break;
 		case PROPILENO:

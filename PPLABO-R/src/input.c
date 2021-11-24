@@ -1,10 +1,3 @@
-/*
- * input.c
- *
- *  Created on: 9 oct. 2021
- *  Author: Dayher Marchan
- */
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
@@ -141,8 +134,10 @@ void getString(char mensaje[],char input[])
 {
 	size_t i = 0;
 	char c;
-	setbuf(stdin,NULL);
+
+	fflush(stdin);
     printf("%s",mensaje);
+    fflush(stdout);
     while((c = getchar()) !=EOF && c!='\n' && i<256){
     	input[i++]=c;
     }
