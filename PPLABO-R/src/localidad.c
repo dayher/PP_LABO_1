@@ -26,9 +26,10 @@ int mostarLocalidades(eLocalidad lista [], int longitud)
     int contador=0;
 
     if(lista==NULL || longitud<1) return -1;
+
     for(int i=0 ; i<longitud ; i++){
         if(lista[i].isEmpty==0){
-            printf("%d\t%s\n",++contador,lista[i].nombre);
+            printf("\t#%d\t%s\n",++contador,lista[i].nombre);
         }
     }
     return contador;
@@ -46,7 +47,7 @@ int ingresarLocalidad(eLocalidad lista [], int longitud)
 
     if(contador>0)
 	{
-		opcion = getInt("Ingrese el numero de su localidad",1,contador);
+		opcion = getInt("\nIngrese número de localidad\t",1,contador);
 	}
 
     for(int i=0 ; i<longitud ; i++){

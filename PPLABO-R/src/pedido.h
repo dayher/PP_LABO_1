@@ -16,7 +16,7 @@
 
 typedef struct {
     int id; //private key
-    int cliente; //fareign key
+    int cliente; //foreign key
     float cantidad;
     float tipo[MAX_TIPO]; //Hacer que esto sea escalable (usar ejemplo clase)
     int estado;

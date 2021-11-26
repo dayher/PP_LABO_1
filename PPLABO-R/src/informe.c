@@ -3,19 +3,101 @@
 #include <string.h>
 #include <stdlib.h>
 
+
+int imprimirClienteConMasPedidos(ePedido listaPedidos[], int nPedidos, eCliente listaClientes[], int nClientes)
+{
+	eCliente aux;
+	int max = 0;
+	int cantidad;
+
+	for(int i = 0; i<nClientes; i++){
+		if(listaClientes[i].isEmpty == 0){
+			cantidad = contarPendientesPorCliente(listaPedidos, nPedidos, listaClientes[i].id) + contarProcesadosPorCliente(listaPedidos, nPedidos, listaClientes[i].id);
+			if(cantidad>max){
+				aux = listaClientes[i];
+				max = cantidad;
+			}
+		}
+	}
+	printf("\nCliente con mayor cantidad de pedidos: %s, cantidad: %d\n", aux.nombre, max);
+
+	return 0;
+}
+
+int imprimirClienteConMasPendientes(ePedido listaPedidos[], int nPedidos, eCliente listaClientes[], int nClientes)
+{
+	eCliente aux;
+	int max = 0;
+	int cantidad;
+
+	for(int i = 0; i<nClientes; i++){
+		if(listaClientes[i].isEmpty == 0){
+			cantidad = contarPendientesPorCliente(listaPedidos, nPedidos, listaClientes[i].id);
+			if(cantidad>max){
+				aux = listaClientes[i];
+				max = cantidad;
+			}
+		}
+	}
+	printf("\nCliente con mayor cantidad de pedidos pendientes: %s, cantidad: %d\n", aux.nombre, max);
+
+	return 0;
+}
+
+int contarPendientesPorCliente(ePedido list[], int len, int cliente)
+{
+	int contador = 0;
+
+    if(list==NULL ||len<1 ) return -1;
+	for(int i=0; i<len; i++){
+        if(list[i].cliente==cliente && list[i].isEmpty==0 && list[i].estado==PENDIENTE){
+        	contador++;
+        }
+	}
+
+	return contador;
+}
+
+int imprimirClienteConMasProcesados(ePedido listaPedidos[], int nPedidos, eCliente listaClientes[], int nClientes)
+{
+	eCliente aux;
+	int max = 0;
+	int cantidad;
+
+	for(int i = 0; i<nClientes; i++)
+	{
+		if(listaClientes[i].isEmpty == 0)
+		{
+			cantidad = contarProcesadosPorCliente(listaPedidos, nPedidos, listaClientes[i].id);
+
+			if(cantidad>max)
+			{
+				aux = listaClientes[i];
+				max = cantidad;
+			}
+		}
+	}
+	printf("\nCliente con mayor cantidad de pedidos procesados: %s, cantidad: %d", aux.nombre, max);
+
+	return 0;
+}
+
+int contarProcesadosPorCliente(ePedido list[], int len, int cliente)
+{
+	int contador = 0;
+
+    if(list==NULL ||len<1 ) return -1;
+	for(int i=0; i<len; i++){
+        if(list[i].cliente==cliente && list[i].isEmpty==0 && list[i].estado==COMPLETADO){
+        	contador++;
+        }
+	}
+
+	return contador;
+}
 /*
 6) Imprimir Clientes: Se imprimirá una lista de clientes con todos sus datos junto con la cantidad de “pedidos de recolección” que posee en estado “Pendiente”.
 */
-int contarPendientesPorCliente(ePedido list[], int len, int cliente)
-{
-    int contador=0;
-    if(list==NULL ||len<1 ) return -1;
-	for(int i=0; i<len; i++){
-        if(list[i].cliente==cliente && list[i].isEmpty==0 && list[i].estado==PENDIENTE)
-            contador++;
-	}
-    return contador;
-}
 
 int imprimirClientes(ePedido listaPedidos[], int nPedidos, eCliente listaClientes[], int nClientes, eLocalidad listaLocalidades[], int nLocalidades)
 {
@@ -117,7 +199,7 @@ int promediarPropileno(ePedido listaPedidos[], int nPedidos, int nClientes)
         }
     }
     promedio = acumuladorPropileno / nClientes;
-    printf("Promedio de propileno: %.2lf (kg/cliente)",promedio);
+    printf("Promedio de propileno: %.2lf (kg/cliente)\n",promedio);
 
     return promedio;
 }

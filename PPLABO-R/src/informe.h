@@ -12,3 +12,8 @@ int promediarPropileno(ePedido listaPedidos[], int nPedidos, int nClientes);
 int imprimirPendientesPorCliente(ePedido list[], int len, int cliente);
 int imprimirProcesadosPorCliente(ePedido list[], int len, int cliente);
 int contarPendientesPorCliente(ePedido list[], int len, int cliente);
+int imprimirClienteConMasPendientes(ePedido listaPedidos[], int nPedidos, eCliente listaClientes[], int nClientes);
+int imprimirClienteConMasProcesados(ePedido listaPedidos[], int nPedidos, eCliente listaClientes[], int nClientes);
+int contarPendientesPorCliente(ePedido list[], int len, int cliente);
+int contarProcesadosPorCliente(ePedido list[], int len, int cliente);
+int imprimirClienteConMasPedidos(ePedido listaPedidos[], int nPedidos, eCliente listaClientes[], int nClientes);

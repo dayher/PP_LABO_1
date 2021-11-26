@@ -3,7 +3,7 @@
  Name        : PPLABO-R.c
  Author      : Dayher Marchan
  Version     :
- Copyright   : Your copyright notice
+ Copyright   :
  Description : Una empresa de recolección y reciclado de plásticos requiere un sistema que les permita administrar sus clientes y pedidos de recolección.
  ============================================================================
  */
@@ -13,7 +13,7 @@
 
 #define MAX_CLIENTE 100
 #define MAX_PEDIDO 1000
-#define MAX_LOCALIDAD 5
+#define MAX_LOCALIDAD 6
 #define ALTA 1
 #define BAJA 2
 #define MODIFICACION 3
@@ -24,7 +24,10 @@
 #define PROCESADOS 8
 #define LOCALIDAD 9
 #define PROPILENO 10
-#define MAX_MENU 11
+#define MAYOR_PENDIENTES 11
+#define MAYOR_PROCESADOS 12
+#define MAYOR_PEDIDOS 13
+#define MAX_MENU 14
 #define SALIR 0
 
 int main()
@@ -37,7 +40,7 @@ int main()
     int altaClientes = 0;
     eCliente listaClientes[MAX_CLIENTE];
     ePedido listaPedidos[MAX_PEDIDO];
-    eLocalidad listaLocalidades[MAX_LOCALIDAD] = {{10,"CABA",0},{11,"Jujuy",0},{12,"Mendoza",0},{13,"Bariloche",0}};
+    eLocalidad listaLocalidades[MAX_LOCALIDAD] = {{10,"CABA",0},{11,"Jujuy",0},{12,"Mendoza",0},{13,"Avellaneda",1},{14,"Ituzaingo",1},{15,"Bariloche",0}};
 
     inicializarListaClientes(listaClientes, MAX_CLIENTE);
     inicializarListaPedidos(listaPedidos, MAX_PEDIDO);
@@ -55,8 +58,11 @@ int main()
 				"%d) PROCESADOS\n"
 				"%d) LOCALIDAD\n"
 				"%d) PROPILENO\n"
+				"%d) CLIENTE CON MAS PEDIDOS PENDIENTES\n"
+				"%d) CLIENTE CON MAS PEDIDOS PROCESADOS\n"
+				"%d) CLIENTE CON MAS PEDIDOS \n"
 				"%d) SALIR\n",
-				ALTA, BAJA, MODIFICACION, PEDIDO, PROCESAR, CLIENTES, PENDIENTES, PROCESADOS, LOCALIDAD, PROPILENO, SALIR);
+				ALTA, BAJA, MODIFICACION, PEDIDO, PROCESAR, CLIENTES, PENDIENTES, PROCESADOS, LOCALIDAD, PROPILENO, MAYOR_PENDIENTES, MAYOR_PROCESADOS, MAYOR_PEDIDOS, SALIR);
 
 		opcion = getInt("\nIngrese una opción:\t",SALIR,MAX_MENU);
 
@@ -64,8 +70,8 @@ int main()
 		case ALTA:
 			if(!ingresarCliente(listaClientes,MAX_CLIENTE,idCliente, listaLocalidades, MAX_LOCALIDAD)){
 				idCliente++;
-				printf("\nAlta exitosa\n");
 				altaClientes++;
+				printf("\nAlta exitosa\n");
 			} else {
 				printf("No hay espacios disponibles\n");
 			}
@@ -97,7 +103,8 @@ int main()
 			if(altaClientes==0){
 				printf("\nNo hay Altas en el sistema\n");
 			} else {
-				if(!crearPedido(listaPedidos, MAX_PEDIDO, idPedido, listaClientes, MAX_CLIENTE)){ // validar que haya espacio suficiente y sumar a idPedido
+				imprimirClientes(listaPedidos, MAX_PEDIDO, listaClientes,MAX_CLIENTE, listaLocalidades, MAX_LOCALIDAD);
+				if(!crearPedido(listaPedidos, MAX_PEDIDO, idPedido, listaClientes, MAX_CLIENTE)){
     				pedidosPendientes++;
     				idPedido++;
     				printf("\nSe creó el pedido\n");
@@ -108,8 +115,9 @@ int main()
 			break;
 		case PROCESAR:
 			if(altaClientes==0 || pedidosPendientes==0){
-				printf("\nNo hay Altas en el sistema\n");
+				printf("\nNo hay Altas en el sistema o no hay pedidos pendientes\n");
 			} else {
+				imprimirPendientes(listaPedidos, MAX_PEDIDO, listaClientes,MAX_CLIENTE);
 			    if(!procesarPedido(listaPedidos, MAX_PEDIDO)){
     				pedidosProcesados++;
     				pedidosPendientes--;
@@ -153,6 +161,27 @@ int main()
 				printf("\nNo hay altas en el sistema o no se han procesado pedidos\n");
 			} else {
 				promediarPropileno(listaPedidos, MAX_PEDIDO, altaClientes);
+			}
+			break;
+		case MAYOR_PENDIENTES:
+			if(altaClientes==0|| pedidosPendientes==0){
+				printf("\nNo hay altas en el sistema o no hay pedidos pendientes\n");
+			} else {
+				imprimirClienteConMasPendientes(listaPedidos, MAX_PEDIDO, listaClientes,MAX_CLIENTE);
+			}
+			break;
+		case MAYOR_PROCESADOS:
+			if(altaClientes==0|| pedidosProcesados==0){
+				printf("\nNo hay altas en el sistema o no hay pedidos procesados\n");
+			} else {
+				imprimirClienteConMasProcesados(listaPedidos, MAX_PEDIDO, listaClientes,MAX_CLIENTE);
+			}
+			break;
+		case MAYOR_PEDIDOS:
+			if(altaClientes==0|| (pedidosPendientes==0 && pedidosProcesados==0)){
+				printf("\nNo hay altas en el sistema o no hay pedidos\n");
+			} else {
+				imprimirClienteConMasPedidos(listaPedidos, MAX_PEDIDO, listaClientes,MAX_CLIENTE);
 			}
 			break;
 		case SALIR:
