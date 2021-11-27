@@ -1,5 +1,8 @@
 #include "factura.h"
+#include "pedido.h"
+#include "input.h"
 #include <stdio.h>
+#include <string.h>
 
 int inicializarListaFacturas(eFactura list[], int len)
 {
@@ -15,7 +18,7 @@ int inicializarListaFacturas(eFactura list[], int len)
 	return retorno;
 }
 
-int guardarFactura(eFactura list[], int len, int id, int pedido, float importe)
+int guardarFactura(eFactura list[], int len, int id, int pedido, float importe, char descripcion[])
 {
 	int retorno = -1;
 
@@ -28,6 +31,7 @@ int guardarFactura(eFactura list[], int len, int id, int pedido, float importe)
 				list[i].pedido=pedido;
 				list[i].importe=importe;
 				list[i].isEmpty=0;
+				strcpy(list[i].descripcion,descripcion);
 				retorno = 0;
 				break;
 			}
@@ -36,22 +40,23 @@ int guardarFactura(eFactura list[], int len, int id, int pedido, float importe)
     return retorno;
 }
 
-int crearFactura(eFactura listaFacturas[], int nFacturas, int id, ePedido listaPedidos[], int nPedidos)
+int crearFactura(eFactura listaFacturas[], int nFacturas, int idFactura, ePedido listaPedidos[], int nPedidos, int idPedido)
 {
     float importe;
     int index;
-    int pedido;
     int retorno = -1;
+    char descripcion[MAX_DETALLE];
 
 	if(listaPedidos!=NULL && nPedidos>0 && listaFacturas!=NULL && nFacturas>0 )
 	{
-		pedido = getInt("Ingrese id del pedido: ",0 ,MAX_ID);
-		index = buscarPedidoPorId(listaPedidos, nPedidos , pedido);
+
+		index = buscarPedidoPorId(listaPedidos, nPedidos , idPedido);
 
 		if(index>=0)
 		{
+			getString("Ingrese descripción: ", descripcion);
 			importe = (listaPedidos[index].cantidad)*PRECIOXKG;
-			retorno = guardarFactura(listaFacturas, nFacturas, id, pedido ,importe);
+			retorno = guardarFactura(listaFacturas, nFacturas, idFactura, idPedido ,importe, descripcion);
 		}
 	}
 	return retorno;

@@ -1,8 +1,6 @@
 #ifndef CLIENTE_H_
 #define CLIENTE_H_
 
-#endif /* CLIENTE_H_ */
-
 #include "localidad.h"
 #include <stdlib.h>
 #include <string.h>
@@ -26,3 +24,5 @@ int ingresarCliente(eCliente listaClientes[], int nClientes, int id, eLocalidad 
 int buscarClientePorId(eCliente lista[], int longitud, int id);
 int eliminarCliente(eCliente lista[], int longitud);
 int modificarCliente(eCliente lista[], int longitud, eLocalidad list2[], int len2);
+
+#endif /* CLIENTE_H_ */

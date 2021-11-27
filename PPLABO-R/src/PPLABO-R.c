@@ -13,6 +13,7 @@
 
 #define MAX_CLIENTE 100
 #define MAX_PEDIDO 1000
+#define MAX_FACTURA 100
 #define MAX_LOCALIDAD 6
 #define ALTA 1
 #define BAJA 2
@@ -27,6 +28,7 @@
 #define MAYOR_PENDIENTES 11
 #define MAYOR_PROCESADOS 12
 #define MAYOR_PEDIDOS 13
+#define MAYOR_IMPORTE 14
 #define MAX_MENU 14
 #define SALIR 0
 
@@ -35,16 +37,18 @@ int main()
     int opcion=MAX_MENU;
     int idCliente = 100;
     int idPedido = 1000;
+    int idFactura = 1000;
     int pedidosPendientes = 0;
     int pedidosProcesados = 0;
     int altaClientes = 0;
     eCliente listaClientes[MAX_CLIENTE];
     ePedido listaPedidos[MAX_PEDIDO];
+    eFactura listaFacturas[MAX_FACTURA];
     eLocalidad listaLocalidades[MAX_LOCALIDAD] = {{10,"CABA",0},{11,"Jujuy",0},{12,"Mendoza",0},{13,"Avellaneda",1},{14,"Ituzaingo",1},{15,"Bariloche",0}};
 
     inicializarListaClientes(listaClientes, MAX_CLIENTE);
     inicializarListaPedidos(listaPedidos, MAX_PEDIDO);
-   /* inicializarListaLocalidades(listaLocalidades, MAX_LOCALIDAD);*/
+    inicializarListaFacturas(listaFacturas, MAX_FACTURA);
 
     while(opcion!=SALIR){
 		printf("\n"
@@ -61,8 +65,9 @@ int main()
 				"%d) CLIENTE CON MAS PEDIDOS PENDIENTES\n"
 				"%d) CLIENTE CON MAS PEDIDOS PROCESADOS\n"
 				"%d) CLIENTE CON MAS PEDIDOS \n"
+				"%d) LOCALIDAD CON MAYOR IMPORTE EN FACTURA \n"
 				"%d) SALIR\n",
-				ALTA, BAJA, MODIFICACION, PEDIDO, PROCESAR, CLIENTES, PENDIENTES, PROCESADOS, LOCALIDAD, PROPILENO, MAYOR_PENDIENTES, MAYOR_PROCESADOS, MAYOR_PEDIDOS, SALIR);
+				ALTA, BAJA, MODIFICACION, PEDIDO, PROCESAR, CLIENTES, PENDIENTES, PROCESADOS, LOCALIDAD, PROPILENO, MAYOR_PENDIENTES, MAYOR_PROCESADOS, MAYOR_PEDIDOS, MAYOR_IMPORTE, SALIR);
 
 		opcion = getInt("\nIngrese una opción:\t",SALIR,MAX_MENU);
 
@@ -118,9 +123,10 @@ int main()
 				printf("\nNo hay Altas en el sistema o no hay pedidos pendientes\n");
 			} else {
 				imprimirPendientes(listaPedidos, MAX_PEDIDO, listaClientes,MAX_CLIENTE);
-			    if(!procesarPedido(listaPedidos, MAX_PEDIDO)){
+			    if(!procesarPedido(listaPedidos, MAX_PEDIDO, idFactura, listaFacturas, MAX_FACTURA)){
     				pedidosProcesados++;
     				pedidosPendientes--;
+    				idFactura++;
     				printf("\nSe procesó el pedido\n");
 			    } else {
 			        printf("\nNo se procesó el pedido\n");
@@ -182,6 +188,13 @@ int main()
 				printf("\nNo hay altas en el sistema o no hay pedidos\n");
 			} else {
 				imprimirClienteConMasPedidos(listaPedidos, MAX_PEDIDO, listaClientes,MAX_CLIENTE);
+			}
+			break;
+		case MAYOR_IMPORTE:
+			if(altaClientes==0 ||  pedidosProcesados==0){
+				printf("\nNo hay altas en el sistema o no se han procesado pedidos\n");
+			} else {
+				imprimirLocalidadConMayorImporte(listaPedidos, MAX_PEDIDO, listaClientes,MAX_CLIENTE, listaLocalidades, MAX_LOCALIDAD, listaFacturas, MAX_FACTURA);
 			}
 			break;
 		case SALIR:
