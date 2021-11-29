@@ -2,7 +2,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include "LinkedList.h"
-
+#include "Libro.h"
+#include "Editorial.h"
 
 /** \brief Parsea los datos de los libros desde el archivo data.csv (modo texto).
  *
@@ -13,22 +14,29 @@
  */
 int parser_LibroFromText(FILE* pFile , LinkedList* pArrayListLibro)
 {
-	char idStr[50], nombre[50], hsStr[50], sueldoStr[50];
+	char idStr[MAX_CADENA],
+	titulo[MAX_CADENA],
+	autor[MAX_CADENA],
+	precioStr[MAX_CADENA],
+	idEditorial[MAX_CADENA];
 	eLibro * newLibro;
+	int retorno=1;
 
-	 if (pFile==NULL || pArrayListLibro==NULL) return 1;
-
-	fscanf(pFile, "%[^,],%[^,],%[^,],%[^\n]\n", idStr, nombre, hsStr, sueldoStr);
-	fflush(NULL);
-
-	while(!feof(pFile)) {
-		fscanf(pFile, "%[^,],%[^,],%[^,],%[^\n]\n", idStr, nombre, hsStr, sueldoStr);
+	 if (pFile!=NULL && pArrayListLibro!=NULL)
+	 {
+		fscanf(pFile, "%[^,],%[^,],%[^,],%[^,]%[^\n]\n", idStr, titulo, autor, precioStr, idEditorial);
 		fflush(NULL);
-		newLibro = employee_newParametros(idStr, nombre, hsStr, sueldoStr);
-		ll_add(pArrayListLibro, newLibro);
-	}
 
-    return 0;
+		while(!feof(pFile))
+		{
+			fscanf(pFile, "%[^,],%[^,],%[^,],%[^,],%[^\n]\n", idStr, titulo, autor, precioStr, idEditorial);
+			fflush(NULL);
+			newLibro = libro_newParametros(idStr, titulo, autor, precioStr, idEditorial);
+			ll_add(pArrayListLibro, newLibro);
+		}
+		retorno=0;
+	 }
+    return retorno;
 }
 
 /** \brief Parsea los datos de la lista de Libros al achivo de texto.
@@ -41,20 +49,27 @@ int parser_LibroFromText(FILE* pFile , LinkedList* pArrayListLibro)
 int parser_TextFromLibro(FILE* pFile , LinkedList* pArrayListLibro){
 	eLibro * aux;
     int i=0;
-    int id, sueldo, hs;
-    char nombre[128];
+    int id, idEditorial;
+    float precio;
+    char titulo[128];
+    char autor[128];
+    int retorno=1;
 
-    if (pFile==NULL || pArrayListLibro==NULL) return 1;
-
-    while((aux = (eLibro *)ll_get(pArrayListLibro, i)) != NULL){
-    	employee_getNombre(aux, nombre);
-    	employee_getId(aux, &id);
-    	employee_getSueldo(aux, &sueldo);
-    	employee_getHorasTrabajadas(aux, &hs);
-    	fprintf(pFile, "%d,%s,%d,%d\n",id,nombre,hs,sueldo);
-    	i++;
+    if (pFile!=NULL && pArrayListLibro!=NULL)
+    {
+		while((aux = (eLibro *)ll_get(pArrayListLibro, i)) != NULL)
+		{
+			libro_getId(aux, &id);
+			libro_getAutor(aux, autor);
+			libro_getTitulo(aux, titulo);
+			libro_getPrecio(aux, &precio);
+			libro_getIdEditorial(aux,&idEditorial);
+			fprintf(pFile, "%d,%s,%d,%f\n",id,titulo,idEditorial,precio); // guardar nombre del editorial no su id
+			i++;
+		}
+    	retorno=0;
     }
-	return 0;
+	return retorno;
 }
 
 /** \brief Parsea los datos de los editoriales desde el archivo data.csv (modo texto).
@@ -66,21 +81,24 @@ int parser_TextFromLibro(FILE* pFile , LinkedList* pArrayListLibro){
  */
 int parser_EditorialFromText(FILE* pFile , LinkedList* pArrayListEditorial)
 {
-	char idStr[50], nombre[50], hsStr[50], sueldoStr[50];
+	char idStr[50], nombre[50];
 	eEditorial * newEditorial;
+	int retorno=1;
 
-	 if (pFile==NULL || pArrayListEditorial==NULL) return 1;
-
-	fscanf(pFile, "%[^,],%[^,],%[^,],%[^\n]\n", idStr, nombre, hsStr, sueldoStr);
-	fflush(NULL);
-
-	while(!feof(pFile)) {
-		fscanf(pFile, "%[^,],%[^,],%[^,],%[^\n]\n", idStr, nombre, hsStr, sueldoStr);
+	 if (pFile!=NULL && pArrayListEditorial!=NULL)
+	 {
+		fscanf(pFile, "%[^,],%[^\n]\n", idStr, nombre);
 		fflush(NULL);
-		newEditorial = employee_newParametros(idStr, nombre, hsStr, sueldoStr);
-		ll_add(pArrayListEditorial, newEditorial);
-	}
 
-    return 0;
+		while(!feof(pFile))
+		{
+			fscanf(pFile, "%[^,],%[^\n]\n", idStr, nombre);
+			fflush(NULL);
+			newEditorial = editorial_newParametros(idStr, nombre);
+			ll_add(pArrayListEditorial, newEditorial);
+		}
+		retorno=0;
+	 }
+    return retorno;
 }
 

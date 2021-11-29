@@ -1,5 +1,6 @@
 #ifndef CONTROLLER_H_
 #define CONTROLLER_H_
+#include "LinkedList.h"
 
 int controller_loadLibroFromText(char* path , LinkedList* pArrayListLibro);
 int controller_ListLibro(LinkedList* pArrayListLibro);
