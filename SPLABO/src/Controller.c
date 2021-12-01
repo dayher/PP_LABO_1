@@ -36,21 +36,23 @@ int controller_loadLibroFromText(char* path , LinkedList* pArrayListLibro)
  * \return int 0 en caso de exito, 1 en caso de error
  *
  */
-int controller_ListLibro(LinkedList* pArrayListLibro)
+int controller_ListLibro(LinkedList* pArrayListLibro, LinkedList *pArrayListEditorial)
 {
 	eLibro * aux;
+	eEditorial * editorial;
 	int id, idEditorial; // debe mostrarse el nombre del editorial no su id
+	char nombreEditorial[128];
 	float precio;
 	char titulo[128];
 	char autor[128]; //Falta agregar este campo al listado
-    int i=0;
+    int i=0,j=0;
     int retorno=1;
 
-    if(pArrayListLibro != NULL)
+    if(pArrayListLibro != NULL && pArrayListEditorial!=NULL)
     {
-		printf("\n\t\tLISTADO:\n\n"
-				" ID \t|\tTITULO    \t\t\t| EDITORIAL \t|\t PRECIO\n"
-				"__________________________________________________________________________________\n");
+		printf(	"----------------------------------------------------------------------------------------------------------------------------------\n"
+				"\tID \t\tTITULO    \t\t\t\tAUTOR\t\t\tEDITORIAL \t\t\tPRECIO\n"
+				"----------------------------------------------------------------------------------------------------------------------------------\n");
 
 		while((aux = (eLibro *) ll_get(pArrayListLibro, i)) != NULL)
 		{
@@ -59,7 +61,19 @@ int controller_ListLibro(LinkedList* pArrayListLibro)
 			libro_getTitulo(aux, titulo);
 			libro_getPrecio(aux, &precio);
 			libro_getIdEditorial(aux,&idEditorial);
-			printf("  %d\t|\t%-32s|\t%d\t|\t%.2f\n", id,titulo,idEditorial,precio);
+
+			while((editorial = (eEditorial *) ll_get(pArrayListEditorial, j)) != NULL)
+			{
+				if(idEditorial==(editorial->idEditorial))
+				{
+					editorial_getNombre(editorial, nombreEditorial);
+					j=0;
+					break;
+				}
+				j++;
+			}
+
+			printf("\t%d\t|\t%-32s|\t%-15s|\t%-20s\t|\t%.2f\n",id,titulo, autor,nombreEditorial,precio);
 			i++;
 		}
     	retorno=0;
@@ -139,4 +153,107 @@ int controller_loadEditorialFromText(char* path , LinkedList* pArrayListEditoria
 
 	}
     return retorno;
+}
+
+int controller_filtrarEditorialMinotauro(LinkedList* pArrayListLibro, char path[])
+{
+	int retorno= -1;
+	FILE * pFile;
+
+	LinkedList * newLinkedList;
+
+	if(pArrayListLibro!=NULL && path!=NULL)
+	{
+		newLinkedList = ll_filter(pArrayListLibro,&comprobarListadoMinotauro);
+
+		pFile = fopen(path,"wt");
+
+		if(pFile!=NULL)
+		{
+			parser_TextFromLibro(pFile, newLinkedList);
+
+			if((fclose(pFile))!=EOF)
+			{
+				ll_deleteLinkedList(newLinkedList);
+				retorno=0;
+			}
+		}
+	}
+	return retorno;
+}
+
+int comprobarListadoMinotauro(void * libro)
+{
+	eLibro* aux;
+	int idEditorial;
+	int retorno=0;
+
+	if(libro!=NULL)
+	{
+		aux = (eLibro*) libro;
+		libro_getIdEditorial(aux,&idEditorial);
+		if(idEditorial==103){
+			retorno=1;
+		}
+	}
+
+	return retorno;
+}
+
+int controller_mapLibros(LinkedList* pArrayListLibro,char path[])
+{
+	int retorno = -1;
+	LinkedList * listaMap;
+
+	if(path != NULL && pArrayListLibro != NULL)
+	{
+		retorno = 0;
+
+		listaMap = ll_clone(pArrayListLibro);
+		ll_map(listaMap, controller_criterioDescuento);
+		controller_saveAsText(path, listaMap);
+		ll_deleteLinkedList(listaMap);
+	}
+	return retorno;
+}
+
+int controller_criterioDescuento(void * libro)
+{
+	int retorno = 0;
+	eLibro *aux;
+	int idEditorial;
+	float precio;
+
+	aux = (eLibro*) libro;
+	libro_getIdEditorial(aux, &idEditorial);
+	libro_getPrecio(aux, &precio);
+	if(idEditorial == 100 && precio > 299)
+	{
+		precio*=0.7;
+		libro_setPrecio(aux, precio);
+		retorno = 1;
+	}
+	if(idEditorial == 101 && precio < 201)
+	{
+		precio*=0.9;
+		libro_setPrecio(aux, precio);
+		retorno = 1;
+	}
+	return retorno;
+}
+int controller_mostrarMenu(void)
+{
+	int opcion;
+
+	printf("\n1)CARGAR ARCHIVO LIBROS\n"
+			"2)CARGAR ARCHIVO EDITORIALES\n"
+			"3)LISTAR LIBROS\n"
+			"4)ORDENAR\n"
+			"5)FILTRAR\n"
+			"6)MAPEAR\n"
+			"7)SALIR\n");
+
+	opcion = getInt("\nIngrese una opcion:\n",0,10);
+
+	return opcion;
 }

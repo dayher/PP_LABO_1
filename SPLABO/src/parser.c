@@ -24,9 +24,6 @@ int parser_LibroFromText(FILE* pFile , LinkedList* pArrayListLibro)
 
 	 if (pFile!=NULL && pArrayListLibro!=NULL)
 	 {
-		fscanf(pFile, "%[^,],%[^,],%[^,],%[^,]%[^\n]\n", idStr, titulo, autor, precioStr, idEditorial);
-		fflush(NULL);
-
 		while(!feof(pFile))
 		{
 			fscanf(pFile, "%[^,],%[^,],%[^,],%[^,],%[^\n]\n", idStr, titulo, autor, precioStr, idEditorial);
@@ -64,7 +61,7 @@ int parser_TextFromLibro(FILE* pFile , LinkedList* pArrayListLibro){
 			libro_getTitulo(aux, titulo);
 			libro_getPrecio(aux, &precio);
 			libro_getIdEditorial(aux,&idEditorial);
-			fprintf(pFile, "%d,%s,%d,%f\n",id,titulo,idEditorial,precio); // guardar nombre del editorial no su id
+			fprintf(pFile, "%d,%s,%s,%d,%f\n",id, titulo, autor, idEditorial, precio); // guardar nombre del editorial no su id
 			i++;
 		}
     	retorno=0;
@@ -87,9 +84,6 @@ int parser_EditorialFromText(FILE* pFile , LinkedList* pArrayListEditorial)
 
 	 if (pFile!=NULL && pArrayListEditorial!=NULL)
 	 {
-		fscanf(pFile, "%[^,],%[^\n]\n", idStr, nombre);
-		fflush(NULL);
-
 		while(!feof(pFile))
 		{
 			fscanf(pFile, "%[^,],%[^\n]\n", idStr, nombre);

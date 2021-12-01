@@ -554,6 +554,52 @@ int ll_sort(LinkedList* this, int (*pFunc)(void* ,void*), int order)
  * \param pFunc (*fn) Puntero a la funcion criterio
  * \return LinkedList* Puntero a la nueva lista lista o NULL en caso de error.
  */
-LinkedList* ll_filter(LinkedList* this, int (*fn)(void* element)){
-	return NULL;
+LinkedList* ll_filter(LinkedList* this, int (*fn)(void* element))
+{
+	int len = ll_len(this);
+	void * aux;
+	LinkedList * newLinkedList = NULL;
+
+	if(this!=NULL && fn!=NULL)
+	{
+		if((newLinkedList = ll_newLinkedList())!=NULL)
+		{
+			for (int i=0; i<len ; i++)
+			{
+				aux = ll_get(this,i);
+
+				if(aux!=NULL && fn(aux)==1)
+				{
+					ll_add(newLinkedList, aux);
+				}
+			}
+		}
+	}
+	return newLinkedList;
+}
+
+//brief ejecutará la función recibida como parámetro por cada ítem de la lista
+//return 0 en caso de exito o 1 en caso de error
+
+int ll_map(LinkedList* this, int (*fn)(void* element))
+{
+	int retorno=1;
+	int len = ll_len(this);
+	void * aux;
+	LinkedList * newLinkedList = NULL;
+
+	if(this!=NULL && fn!=NULL)
+	{
+		for (int i=0; i<len ; i++)
+		{
+			aux = ll_get(this,i);
+
+			if(aux!=NULL)
+			{
+				fn(aux);
+			}
+		}
+		retorno=0;
+	}
+	return retorno;
 }
