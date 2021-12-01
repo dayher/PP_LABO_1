@@ -30,7 +30,7 @@ int main(void)
 	pListEditoriales = ll_newLinkedList();
 	pListLibros = ll_newLinkedList();
 
-	while(opcion!=7)
+	while(opcion!=9)
 	{
 		opcion = controller_mostrarMenu();
 
@@ -55,6 +55,12 @@ int main(void)
 				controller_mapLibros(pListLibros,"librosMap.csv");
 				break;
 			case  7:
+				controller_informarCantidadPrecioMayor(pListLibros);
+				break;
+			case  8:
+				controller_informarSumaEditorialPearson(pListLibros);
+				break;
+			case  9:
 				ll_deleteLinkedList(pListLibros);
 				ll_deleteLinkedList(pListEditoriales);
 				break;

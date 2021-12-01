@@ -586,7 +586,6 @@ int ll_map(LinkedList* this, int (*fn)(void* element))
 	int retorno=1;
 	int len = ll_len(this);
 	void * aux;
-	LinkedList * newLinkedList = NULL;
 
 	if(this!=NULL && fn!=NULL)
 	{
@@ -602,4 +601,26 @@ int ll_map(LinkedList* this, int (*fn)(void* element))
 		retorno=0;
 	}
 	return retorno;
+}
+int ll_count(LinkedList* this, int (*fn)(void* element))
+{
+	int count=-1;
+	int len = ll_len(this);
+	void * aux;
+
+	if(this!=NULL && fn!=NULL)
+	{
+		count=0;
+		for (int i=0; i<len ; i++)
+		{
+			aux = ll_get(this,i);
+
+			if(aux!=NULL && fn(aux)==1)
+			{
+				count++;
+			}
+		}
+
+	}
+	return count;
 }

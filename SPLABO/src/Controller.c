@@ -251,9 +251,88 @@ int controller_mostrarMenu(void)
 			"4)ORDENAR\n"
 			"5)FILTRAR\n"
 			"6)MAPEAR\n"
-			"7)SALIR\n");
+			"7)CONTAR LIBROS PRECIO MAYOR A 500\n"
+			"8)SUMATORIA DE PRECIOS EDITORIAL PEARSON\n"
+			"9)SALIR\n");
 
 	opcion = getInt("\nIngrese una opcion:\n",0,10);
 
 	return opcion;
 }
+
+int controller_informarCantidadPrecioMayor(LinkedList* pArrayListLibro)
+{
+	int retorno= -1;
+	int cantidad;
+
+	if(pArrayListLibro!=NULL)
+	{
+		cantidad = ll_count(pArrayListLibro,comprobarPrecioMayor);
+		printf("\nCantidad de libros con precio mayor a 500: %d\n", cantidad);
+	}
+
+	return retorno;
+}
+int controller_informarSumaEditorialPearson(LinkedList* pArrayListLibro)
+{
+	int retorno =-1;
+	int i=0;
+	float acumulador=0;
+	float precio;
+	LinkedList * newList;
+	eLibro * aux;
+
+	if(pArrayListLibro!=NULL)
+	{
+		newList = ll_filter(pArrayListLibro, comprobarListadoPearson);
+
+		while((aux = (eLibro *) ll_get(newList, i)) != NULL)
+		{
+			libro_getPrecio(aux, &precio);
+			acumulador= acumulador+precio;
+			i++;
+		}
+
+		printf("\nLa Sumatoria de los precios de la Editorial Pearson es: %f  cantidad de libros: %d\n", acumulador, ll_len(newList));
+    	retorno=0;
+	}
+
+	return retorno;
+}
+int comprobarListadoPearson(void *libro)
+{
+	eLibro* aux;
+	int idEditorial;
+	int retorno=0;
+
+	if(libro!=NULL)
+	{
+		aux = (eLibro*) libro;
+		libro_getIdEditorial(aux,&idEditorial);
+		if(idEditorial==102){
+			retorno=1;
+		}
+	}
+	return retorno;
+}
+int comprobarPrecioMayor(void * libro)
+{
+	eLibro* aux;
+	float precio;
+	int retorno=0;
+
+	if(libro!=NULL)
+	{
+		aux = (eLibro*) libro;
+		libro_getPrecio(aux,&precio);
+		if(precio>500){
+			retorno=1;
+		}
+	}
+	return retorno;
+}
+
+
+
+
+

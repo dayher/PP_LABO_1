@@ -16,5 +16,9 @@ int controller_filtrarEditorialMinotauro(LinkedList* pArrayListLibro, char path[
 int controller_mapLibros(LinkedList* pArrayListLibro,char path[]);
 int controller_criterioDescuento(void * libro);
 int controller_mostrarMenu(void);
+int controller_informarCantidadPrecioMayor(LinkedList* pArrayListLibro);
+int controller_informarSumaEditorialPearson(LinkedList* pArrayListLibro);
+int comprobarListadoPearson(void *libro);
+int comprobarPrecioMayor(void * libro);
 
 #endif /* CONTROLLER_H_ */
