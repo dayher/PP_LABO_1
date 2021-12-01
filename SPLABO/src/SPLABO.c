@@ -39,32 +39,68 @@ int main(void)
 		switch(opcion)
 		{
 			case  1:
-				controller_loadLibroFromText("libros.csv", pListLibros);
+				if(controller_loadLibroFromText("libros.csv", pListLibros)==0){
+					printf("\nCARGA EXITOSA\n");
+				} else {
+					printf("\nCARGA FALLIDA\n");
+				}
+
 				break;
 			case  2:
-				controller_loadEditorialFromText("editoriales.csv", pListEditoriales);
+				if(controller_loadEditorialFromText("editoriales.csv", pListEditoriales)==0){
+					printf("\nCARGA EXITOSA\n");
+				} else {
+					printf("\nCARGA FALLIDA\n");
+				}
 				break;
 			case  3:
-				controller_ListLibro(pListLibros, pListEditoriales);
+				if(controller_ListLibro(pListLibros, pListEditoriales)==0){
+					printf("\nFIN DEL LISTADO\n");
+				} else {
+					printf("\nNO SE HA LOGRADO LISTAR\n");
+				}
 				break;
 			case  4:
-				controller_sortLibro(pListLibros);
+				if(controller_sortLibro(pListLibros)==0){
+					printf("\nLISTA ORDENADA\n");
+				} else {
+					printf("\nNO SE HA ORDENADO EL LISTADO\n");
+				}
+
 				break;
 			case  5:
-				controller_filtrarEditorialMinotauro(pListLibros, "editorialMinotauro.csv");
+				if(controller_filtrarEditorialMinotauro(pListLibros, "editorialMinotauro.csv")==0){
+					printf("\nFILTRADO EXITOSO\n");
+				} else {
+					printf("\nNO SE HA FILTRADO LA LISTA\n");
+				}
+
 				break;
 			case  6:
-				controller_mapLibros(pListLibros,"librosMap.csv");
+				if(controller_mapLibros(pListLibros,"mapeado.csv")==0){
+					printf("\nMAPEADO EXITOSO\n");
+				} else {
+					printf("\nNO SE HA MAPEADO LA LISTA\n");
+				}
 				break;
 			case  7:
-				controller_informarCantidadPrecioMayor(pListLibros);
+				if(controller_informarCantidadPrecioMayor(pListLibros)==0){
+					printf("\n\n");
+				} else {
+					printf("\nNO SE LOGRO CONTABILIZAR\n");
+				}
 				break;
 			case  8:
-				controller_informarSumaEditorialPearson(pListLibros);
+				if(controller_informarSumaEditorialPearson(pListLibros)==0){
+					printf("\n\n");
+				} else {
+					printf("\nNO SE LOGRO SUMAR LOS PRECIOS\n");
+				}
 				break;
 			case  9:
 				ll_deleteLinkedList(pListLibros);
 				ll_deleteLinkedList(pListEditoriales);
+				printf("\nFIN DEL PROGRAMA\n");
 				break;
 			default:
 				printf("\nOpcion invalida\n");
@@ -72,5 +108,4 @@ int main(void)
 	}
 	return EXIT_SUCCESS;
 }
-
 

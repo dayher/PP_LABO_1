@@ -255,19 +255,26 @@ int controller_mostrarMenu(int *flag1 , int* flag2)
 			"8)SUMATORIA DE PRECIOS EDITORIAL PEARSON\n"
 			"9)SALIR\n");
 
-	opcion = getInt("\nIngrese una opcion:\n",0,10);
+		opcion = getInt("\nIngrese una opcion:\n",0,10);
 
-	if (opcion==1) (*flag1=1);
-	if (opcion==2) {
-		(*flag2=1);
-	} else {
-		while(opcion>2 && (*flag1)==0 && (*flag2)==0)
+		if(opcion!=1 && opcion!=2 && opcion!=9)
 		{
-			opcion = getInt("\nPrimero debe cargar los listados\n"
-							"\nIngrese una opcion:\n",0,10);
+			while(((*flag1)==0 || (*flag2)==0))
+			{
+				opcion = getInt("\nPrimero debe cargar los listados\n"
+								"\nIngrese una opcion:\n",0,10);
+				if (opcion==1) {
+					(*flag1)=1;
+					break;
+				}
+				if (opcion==2)
+				{
+					(*flag2)=1;
+					break;
+				}
+				if (opcion==9) break;
+			}
 		}
-	}
-
 
 	return opcion;
 }
