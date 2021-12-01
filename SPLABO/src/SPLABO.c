@@ -26,13 +26,15 @@ int main(void)
 	LinkedList * pListEditoriales;
 	LinkedList * pListLibros;
 	int opcion=10;
+	int flag1=0;
+	int flag2=0;
 
 	pListEditoriales = ll_newLinkedList();
 	pListLibros = ll_newLinkedList();
 
 	while(opcion!=9)
 	{
-		opcion = controller_mostrarMenu();
+		opcion = controller_mostrarMenu(&flag1,&flag2);
 
 		switch(opcion)
 		{

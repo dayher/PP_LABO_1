@@ -241,7 +241,7 @@ int controller_criterioDescuento(void * libro)
 	}
 	return retorno;
 }
-int controller_mostrarMenu(void)
+int controller_mostrarMenu(int *flag1 , int* flag2)
 {
 	int opcion;
 
@@ -256,6 +256,18 @@ int controller_mostrarMenu(void)
 			"9)SALIR\n");
 
 	opcion = getInt("\nIngrese una opcion:\n",0,10);
+
+	if (opcion==1) (*flag1=1);
+	if (opcion==2) {
+		(*flag2=1);
+	} else {
+		while(opcion>2 && (*flag1)==0 && (*flag2)==0)
+		{
+			opcion = getInt("\nPrimero debe cargar los listados\n"
+							"\nIngrese una opcion:\n",0,10);
+		}
+	}
+
 
 	return opcion;
 }
